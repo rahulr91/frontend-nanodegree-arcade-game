@@ -39,7 +39,7 @@ var Engine = (function(global) {
          * would be the same for everyone (regardless of how fast their
          * computer is) - hurray time!
          */
-        var now = Date.now(),
+        var now = Date.now();
             dt = (now - lastTime) / 1000.0;
 
         /* Call our update/render functions, pass along the time delta to
@@ -80,7 +80,28 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        if(player.y <= 0) {
+           player.win();
+        }
+        
+        checkCollisions();
+        function checkCollisions() {
+        // console.log("checkCollisions");
+        allEnemies.forEach(function(enemy) {
+            if (checkX() && checkY()) {
+                player.lost();
+            };
+
+            function checkX() {
+                return (player.x - 30) <= (enemy.x + 30) && player.x >= enemy.x;
+            }
+
+            function checkY() {
+                return player.y <= (enemy.y + 40) && player.y >= (enemy.y - 40);
+            }
+        });
+    }
+
     }
 
     /* This is called by the update function and loops through all of the
